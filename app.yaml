@@ -1,0 +1,13 @@
+application: r
+version: 1
+runtime: python
+api_version: 1
+release_managers: dongweiming
+
+handlers:
+- url: /i/(.*)
+  static_files: permdir/\1
+  upload: permdir/.*
+
+- url: /.*
+  wsgi_app: app:app

@@ -1,0 +1,514 @@
+//colors
+$color_tradewind_approx: #63b6ae;
+$white_15: rgba(255, 255, 255, .15);
+$white_0: rgba(255, 255, 255, .0);
+$white: white;
+$color_rangoon_green_20_approx: rgba(30, 30, 30, .2);
+$color_gallery_approx: #e9ebef;
+$color_don_juan_approx: #5e544b;
+$color_celeste_approx: #cdcdcd;
+$concrete: rgb(242,242,242);
+$alabaster: rgb(250,250,250);
+$color_dove_gray_50_approx: rgba(105, 105, 105, .5);
+$color_alto_approx: #dcdcdc;
+$color_suva_gray_approx: #888;
+$color_storm_dust_approx: #666;
+$white_80: rgba(255, 255, 255, .8);
+$black_30: rgba(0, 0, 0, .3);
+$color_dodger_blue_approx: #298cf1;
+$color_denim_approx: rgb(31,106,180);
+$color_copper_rust_approx: rgb(156,74,63);
+$color_flame_pea_approx: rgb(225,91,73);
+$color_black_haze_approx: #f6f6f6;
+
+//fonts
+$font_0: PT Sans Caption;
+$font_1: sans-serif;
+$font_2: PT Sans;
+
+//urls
+$url_0: url(/static/img/arrow.svg);
+
+body {
+    background-color: $color_tradewind_approx;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+input {
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+}
+a {
+    text-decoration: none;
+}
+#holder {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+}
+.arrow {
+    position: fixed;
+    left: 50%;
+    top: 45%;
+    margin-top: -135px;
+    margin-left: -200px;
+    width: 400px;
+    height: 270px;
+    background-image: $url_0;
+    background-size: 400px;
+    background-repeat: no-repeat;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 8px;
+    &.hover {
+        width: 450px;
+        height: 304px;
+        margin-top: -152px;
+        margin-left: -225px;
+        background-size: 450px;
+        .alpha-bg {
+            background-color: $white_0;
+        }
+        .notice {
+            height: 288px;
+            line-height: 288px;
+        }
+    }
+    &.hide {
+        -webkit-animation: hide-arrow .5s ease-out 1 forwards;
+        -moz-animation: hide-arrow .5s ease-out 1 forwards;
+    }
+}
+.alpha-bg {
+    display: block;
+    background-color: $white_15;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    -webkit-transition: background-color .2s linear;
+    -moz-transition: background-color .2s linear;
+}
+.notice {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: block;
+    color: $white;
+    height: 254px;
+    line-height: 254px;
+    font-family: $font_0, $font_1;
+    font-size: 30px;
+    font-weight: bold;
+    opacity: 0;
+    //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    text-shadow: 1px 2px 1px $color_rangoon_green_20_approx;
+    &.show {
+        opacity: 1;
+    }
+}
+
+#drag-notice {
+    -webkit-transition: opacity, height, line-height .1s ease-out;
+    -moz-transition: opacity, height, line-height .1s ease-out;
+}
+
+#drop-notice {
+    -webkit-transition: opacity, height, line-height .3s ease-in;
+    -moz-transition: opacity, height, line-height .3s ease-in;
+
+}
+
+#multi-notice {
+    -webkit-transition: opacity .3s linear;
+    -moz-transition: opacity .3s linear;
+}
+
+#progress {
+    opacity: 0;
+    -webkit-transition: opacity .3s linear;
+    -moz-transition: opacity .3s linear;
+    transition: opacity .3s linear;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    margin-left: -80px;
+    display: none;
+    &.show {
+        opacity: 1;
+        display: block;
+    }
+}
+@-webkit-keyframes animate-stripes {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -60px 0;
+    }
+}
+@-moz-keyframes animate-stripes {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -60px 0;
+    }
+}
+progress {
+    background: $color_gallery_approx;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+progress::-moz-progress-bar {
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    background-color: $color_don_juan_approx;
+    background-size: 30px 30px;
+    background-image: -moz-linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+                                           transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+                                           transparent 75%, transparent);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+                                      transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+                                      transparent 75%, transparent);
+    -moz-animation: animate-stripes 3s linear infinite;
+    animation: animate-stripes 3s linear infinite;
+}
+progress::-webkit-progress-bar {
+    background: $color_gallery_approx;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+progress::-webkit-progress-value {
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    background-color: $color_don_juan_approx;
+    -webkit-background-size: 30px 30px;
+    -moz-background-size: 30px 30px;
+    background-size: 30px 30px;
+    background-image: -webkit-gradient(linear, left top, right bottom,
+                                       color-stop(.25, rgba(255, 255, 255, .15)), color-stop(.25, transparent),
+                                       color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .15)),
+                                       color-stop(.75, rgba(255, 255, 255, .15)), color-stop(.75, transparent),
+                                       to(transparent));
+    background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+                                              transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+                                              transparent 75%, transparent);
+    background-image: -moz-linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+                                           transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+                                           transparent 75%, transparent);
+    background-image: -ms-linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+                                          transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+                                          transparent 75%, transparent);
+    background-image: -o-linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+                                         transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+                                         transparent 75%, transparent);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+                                      transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+                                      transparent 75%, transparent);
+    -webkit-animation: animate-stripes 3s linear infinite;
+    -moz-animation: animate-stripes 3s linear infinite;
+}
+@-webkit-keyframes hide-arrow {
+    0% {
+        width: 450px;
+        height: 304px;
+        margin-top: -152px;
+        margin-left: -225px;
+        background-size: 450px;
+        opacity: 1;
+    }
+    20% {
+        width: 480px;
+        height: 330px;
+        margin-top: -165px;
+        margin-left: -240px;
+        background-size: 480px;
+        opacity: .9;
+    }
+    100% {
+        width: 100px;
+        height: 70px;
+        margin-top: -35px;
+        margin-left: -50px;
+        background-size: 100px;
+        opacity: 0;
+    }
+}
+@-moz-keyframes hide-arrow {
+    0% {
+        width: 450px;
+        height: 304px;
+        margin-top: -152px;
+        margin-left: -225px;
+        background-size: 450px;
+        opacity: 1;
+    }
+    20% {
+        width: 480px;
+        height: 330px;
+        margin-top: -165px;
+        margin-left: -240px;
+        background-size: 480px;
+        opacity: .9;
+    }
+    100% {
+        width: 100px;
+        height: 70px;
+        margin-top: -35px;
+        margin-left: -50px;
+        background-size: 100px;
+        opacity: 0;
+        display: none;
+    }
+}
+@-webkit-keyframes card-in {
+    0% {
+        opacity: 0;
+        -webkit-transform: perspective(600px) scale(0.0) rotateY(180deg);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: perspective(600px) scale(1) rotateY(0deg);
+    }
+}
+@-moz-keyframes card-in {
+    0% {
+        opacity: 0;
+        -webkit-transform: perspective(600px) scale(0.0) rotateY(180deg);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: perspective(600px) scale(1) rotateY(0deg);
+    }
+}
+#card {
+    opacity: 0;
+    min-width: 290px;
+    max-width: 290px;
+    position: fixed;
+    left: 50%;
+    top: 40%;
+    margin-top: -115px;
+    margin-left: -145px;
+    display: none;
+    .p-link {
+        width: 100%;
+        margin-top: 10px;
+        input {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            border: none;
+            background: transparent;
+            text-align: center;
+            color: $color_suva_gray_approx;
+            font-size: 13px;
+        }
+    }
+    &.visible {
+        display: block;
+        opacity: 1;
+    }
+}
+
+#card.show-card, #image-card.show-card {
+    -webkit-animation: card-in .7s ease-in 1 forwards;
+    -moz-animation: card-in .7s ease-in 1 forwards;
+    opacity: 1;
+    display: block;
+}
+
+#image-card {
+    margin-top: 100px;
+    display: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    &.visible {
+        display: block;
+        opacity: 1;
+    }
+    &.zoomed {
+        margin: 0;
+    }
+}
+#card-info {
+    width: 100%;
+    position: relative;
+    z-index: 50;
+    background-color: $color_celeste_approx;
+    border: 1px solid $color_alto_approx;
+    padding-bottom: 20px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background-color: #cdcdcd;
+    background-image: linear-gradient(bottom, rgb(242,242,242) 17%, rgb(250,250,250) 90%);
+    background-image: -o-linear-gradient(bottom, rgb(242,242,242) 17%, rgb(250,250,250) 90%);
+    background-image: -moz-linear-gradient(bottom, rgb(242,242,242) 17%, rgb(250,250,250) 90%);
+    background-image: -webkit-linear-gradient(bottom, rgb(242,242,242) 17%, rgb(250,250,250) 90%);
+    background-image: -ms-linear-gradient(bottom, rgb(242,242,242) 17%, rgb(250,250,250) 90%);
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.17, rgb(242,242,242)),
+        color-stop(0.9, rgb(250,250,250))
+    );
+}
+.file-icon {
+    margin-top: 30px;
+    img {
+        width: 75px;
+        }
+}
+.file-meta {
+    span {
+        font-family: $font_2, $font_1;
+        font-size: 13px;
+        color: $color_suva_gray_approx;
+        &.sep {
+            padding: 0 5px;
+            }
+        }
+    .filename {
+        font-weight: normal;
+        color: $color_storm_dust_approx;
+        font-size: 18px;
+        font-family: $font_2, $font_1;
+        //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+        text-shadow: 0 1px 0 $white_80;
+        padding: 0 20px;
+        //Instead of the line below you could use @include word-break($value)
+        word-break: break-all;
+    }
+}
+#action-area {
+    margin-top: 20px;
+    a {
+        font-family: $font_2, $font_1;
+        display: inline-block;
+        width: 37%;
+        color: $white;
+        padding: 7px 0;
+        margin: 0 10px;
+        font-size: 14px;
+        //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+        text-shadow: 0 1px 0 $black_30;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    #download-link {
+        background-color: $color_dodger_blue_approx;
+        background-image: linear-gradient(bottom, rgb(31,106,180) 11%, rgb(41,141,241) 11%);
+        background-image: -o-linear-gradient(bottom, rgb(31,106,180) 11%, rgb(41,141,241) 11%);
+        background-image: -moz-linear-gradient(bottom, rgb(31,106,180) 11%, rgb(41,141,241) 11%);
+        background-image: -webkit-linear-gradient(bottom, rgb(31,106,180) 11%, rgb(41,141,241) 11%);
+        background-image: -ms-linear-gradient(bottom, rgb(31,106,180) 11%, rgb(41,141,241) 11%);
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0.11, rgb(31,106,180)),
+            color-stop(0.11, rgb(41,141,241))
+        );
+    }
+    #play-link {
+        background-image: linear-gradient(bottom, rgb(156,74,63) 11%, rgb(225,91,73) 11%);
+    background-image: -o-linear-gradient(bottom, rgb(156,74,63) 11%, rgb(225,91,73) 11%);
+    background-image: -moz-linear-gradient(bottom, rgb(156,74,63) 11%, rgb(225,91,73) 11%);
+    background-image: -webkit-linear-gradient(bottom, rgb(156,74,63) 11%, rgb(225,91,73) 11%);
+    background-image: -ms-linear-gradient(bottom, rgb(156,74,63) 11%, rgb(225,91,73) 11%);
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.11, rgb(156,74,63)),
+        color-stop(0.11, rgb(225,91,73))
+    );
+
+    }
+}
+.invisible {
+    display: none;
+}
+
+#image-preview {
+    display: inline-block;
+    max-height: 70%;
+    max-width: 70%;
+    padding: 4px;
+    background-color: $color_black_haze_approx;
+    border: 1px solid $color_alto_approx;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    cursor: zoom-in;
+    cursor: -moz-zoom-in;
+    cursor: -webkit-zoom-in;
+    position: relative;
+    z-index: 45;
+    img {
+        max-height: 70%;
+        max-width: 100%;
+        display: block;
+    }
+    &.zoomed {
+        display: inline-block;
+        max-width: none;
+        max-height: none;
+        cursor: zoom-out;
+        cursor: -moz-zoom-out;
+        cursor: -webkit-zoom-out;
+        position: static;
+        overflow: auto;
+        padding: 4px 0;
+        img {
+            max-height: none;
+            max-width: none;
+        }
+        #image-link {
+            display: none;
+        }
+    }
+}
+#image-link input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    text-align: center;
+    margin: 5px 0;
+    color: $color_suva_gray_approx;
+}
+
+.qrcode {
+    display: none;
+}
