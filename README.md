@@ -4,6 +4,10 @@ Upload file service with react. It's [P](https://github.com/qingfeng/p)'s (react
 
 Douban Intra Service http://r.dapps.douban.com/
 
+# Demo
+
+The [R Demo](https://vast-brushlands-4477.herokuapp.com) showcases `r`.
+
 # Get Started
 
 ```python
