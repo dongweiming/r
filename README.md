@@ -15,7 +15,7 @@ git clone https://github.com/dongweiming/r
 cd r
 virtualenv venv
 source venv/bin/activate
-pip install -r requirement.txt
+pip install -r requirements.txt
 mkdir permdir
 python app.py
 open http://localhost:5000
