@@ -6,8 +6,8 @@
   "scripts": {
     "build": "webpack --progress --colors",
     "watch": "webpack --watch --colors",
-    "start": "webpack && python server.py",
-    "server": "python server.py"
+    "start": "webpack && python app.py",
+    "server": "python app.py"
   },
   "repository": {
     "type": "git",

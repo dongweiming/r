@@ -1,4 +1,4 @@
-webpackJsonp([1],[
+webpackJsonp([0],[
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -10,28 +10,16 @@ webpackJsonp([1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _card = __webpack_require__(159);
+	var _upload = __webpack_require__(157);
 	
-	var _jquery = __webpack_require__(158);
+	var _upload2 = _interopRequireDefault(_upload);
 	
-	var _jquery2 = _interopRequireDefault(_jquery);
+	__webpack_require__(160);
 	
-	var url_i = (0, _jquery2['default'])('meta[name="url_i"]').attr('content');
-	var url_s = (0, _jquery2['default'])('meta[name="url_s"]').attr('content');
-	var quoteurl = (0, _jquery2['default'])('meta[name="quoteurl"]').attr('content');
-	var image_type = (0, _jquery2['default'])('meta[name="image_type"]').attr('content');
+	main();
 	
-	main(url_i, url_s, quoteurl, image_type);
-	
-	function main(url_i, url_s, quoteurl, image_type) {
-	    var image_link_input = '';
-	    var show_image_card = '';
-	    if (image_type === "image") {
-	        image_link_input = url_s;
-	        show_image_card = 'show-card';
-	    }
-	    _react2['default'].render(_react2['default'].createElement(_card.ImageCard, { show_image_card: show_image_card, url_i: url_i,
-	        image_link_input: image_link_input, quoteurl: quoteurl }), document.getElementById('main'));
+	function main() {
+	    _react2['default'].render(_react2['default'].createElement(_upload2['default'], null), document.getElementById('main'));
 	}
 
 /***/ },
@@ -20411,7 +20399,242 @@ webpackJsonp([1],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 157 */,
+/* 157 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _card = __webpack_require__(159);
+	
+	var DragAndDrop = (function (_React$Component) {
+	    _inherits(DragAndDrop, _React$Component);
+	
+	    function DragAndDrop(props) {
+	        var _this = this;
+	
+	        _classCallCheck(this, DragAndDrop);
+	
+	        _get(Object.getPrototypeOf(DragAndDrop.prototype), 'constructor', this).call(this, props);
+	
+	        this.dragEnd = function (event) {
+	            $(_react2['default'].findDOMNode(_this.refs.arrow)).removeClass('hover');
+	            _this.setState({ 'notice': 'dragNotice' });
+	        };
+	
+	        this.dragOver = function (event) {
+	            event.preventDefault();
+	            _this.setState({ 'notice': 'dropNotice' });
+	            $(_react2['default'].findDOMNode(_this.refs.arrow)).addClass('hover');
+	        };
+	
+	        this.dragLeave = function (event) {
+	            $(_react2['default'].findDOMNode(_this.refs.arrow)).removeClass('hover');
+	        };
+	
+	        this.onDrop = function (event) {
+	            $(_react2['default'].findDOMNode(_this.refs.holder)).removeClass();
+	            _this.readfiles(event.nativeEvent.dataTransfer.files, event);
+	        };
+	
+	        this.onChange = function (event) {
+	            _this.readfiles(event.target.files, event);
+	        };
+	
+	        this.readfiles = function (files, event) {
+	            if (files.length != 1) {
+	                event.preventDefault();
+	                _this.setState({ 'notice': 'multiNotice' });
+	                setTimeout((function () {
+	                    _this.setState({ 'notice': 'dragNotice' });
+	                }).bind(_this), 1000);
+	                return;
+	            }
+	            var formData = _this.props.tests.formdata ? new FormData() : null;
+	
+	            if (formData) {
+	                var file = files[0];
+	                formData.append('file', file);
+	                var xhr = new XMLHttpRequest();
+	                xhr.open('POST', '/');
+	                xhr.onreadystatechange = (function () {
+	                    if (xhr.readyState == 4) {
+	                        if (xhr.status == 200) {
+	                            $(_react2['default'].findDOMNode(this.refs.holder)).hide();
+	                            $(_react2['default'].findDOMNode(this.refs.arrow)).addClass('hide');
+	                            this.setState({
+	                                'r': JSON.parse(xhr.responseText),
+	                                'displayProcess': false
+	                            });
+	                        } else {
+	                            this.setState({ 'process': 0 });
+	                            alert('上传失败，请确认上传的文件类型合法');
+	                        }
+	                    }
+	                }).bind(_this);
+	
+	                if (_this.props.tests.progress) {
+	                    var $arrow = $(_react2['default'].findDOMNode(_this.refs.arrow));
+	                    $arrow.addClass('hide');
+	                    $arrow.find('.notice').removeClass('show');
+	                    xhr.upload.addEventListener('progress', _this.handleProgress);
+	                }
+	                xhr.send(formData);
+	            }
+	        };
+	
+	        this.handleProgress = function (event) {
+	            if (!event.lengthComputable) {
+	                return;
+	            }
+	            var completed = event.loaded / event.total * 100 | 0;
+	            _this.setState({ 'process': completed, 'displayProcess': true });
+	        };
+	
+	        this.state = {
+	            notice: 'dragNotice',
+	            process: 0, displayProcess: false,
+	            r: {
+	                filename: '',
+	                size: '',
+	                type: '',
+	                time: '',
+	                url_d: '',
+	                url_s: '',
+	                url_i: '',
+	                url_p: '',
+	                quoteurl: ''
+	            }
+	        };
+	        this.dragEnd = this.dragEnd.bind(this);
+	        this.dragOver = this.dragOver.bind(this);
+	        this.dragLeave = this.dragLeave.bind(this);
+	        this.onDrop = this.onDrop.bind(this);
+	        this.onChange = this.onChange.bind(this);
+	        this.handleProgress = this.handleProgress.bind(this);
+	    }
+	
+	    _createClass(DragAndDrop, [{
+	        key: 'render',
+	        value: function render() {
+	            var noticeMsg = this.props.notices[this.state.notice];
+	
+	            return _react2['default'].createElement(
+	                'div',
+	                null,
+	                _react2['default'].createElement('input', { type: 'file', onDragEnd: this.dragEnd,
+	                    onDragOver: this.dragOver, OnDragLeave: this.dragLeave,
+	                    onDrop: this.onDrop, onChange: this.onChange, ref: 'holder', id: 'holder' }),
+	                _react2['default'].createElement(
+	                    'div',
+	                    { className: 'arrow', ref: 'arrow' },
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { className: 'alpha-bg' },
+	                        _react2['default'].createElement(
+	                            'span',
+	                            { className: 'notice show' },
+	                            noticeMsg
+	                        )
+	                    )
+	                ),
+	                _react2['default'].createElement(Progress, { completed: this.state.process, show: this.state.displayProcess }),
+	                _react2['default'].createElement(_card.FileCard, { filename: this.state.r.filename, size: this.state.r.size,
+	                    time: this.state.r.time, type: this.state.r.type,
+	                    url_d: this.state.r.url_d, url_p: this.state.r.url_p,
+	                    url_i: this.state.r.url_i, url_s: this.state.r.url_s,
+	                    quoteurl: this.state.r.quoteurl })
+	            );
+	        }
+	    }], [{
+	        key: 'defaultProps',
+	        value: {
+	            notices: {
+	                dragNotice: 'drag files here',
+	                dropNotice: 'now drop!',
+	                multiNotice: 'one file only'
+	            },
+	            tests: {
+	                filereader: typeof FileReader != 'undefined',
+	                dnd: 'draggable' in document.createElement('span'),
+	                formdata: !!window.FormData,
+	                progress: "upload" in new XMLHttpRequest()
+	            },
+	            acceptedTypes: {
+	                'image/png': true,
+	                'image/jpeg': true,
+	                'image/gif': true
+	            }
+	        },
+	        enumerable: true
+	    }]);
+	
+	    return DragAndDrop;
+	})(_react2['default'].Component);
+	
+	exports['default'] = DragAndDrop;
+	;
+	
+	var Progress = (function (_React$Component2) {
+	    _inherits(Progress, _React$Component2);
+	
+	    function Progress() {
+	        _classCallCheck(this, Progress);
+	
+	        _get(Object.getPrototypeOf(Progress.prototype), 'constructor', this).apply(this, arguments);
+	    }
+	
+	    _createClass(Progress, [{
+	        key: 'render',
+	        value: function render() {
+	            var cls;
+	            if (this.props.show) {
+	                cls = 'show';
+	            } else {
+	                cls = '';
+	            }
+	            var style = {
+	                transition: 'width 20ms',
+	                WebkitTransition: 'width 2ms',
+	                width: this.props.completed + '%',
+	                eight: this.props.height || 10
+	            };
+	            return _react2['default'].createElement(
+	                'div',
+	                { id: 'progress', className: cls },
+	                _react2['default'].createElement(
+	                    'progress',
+	                    { id: 'uploadprogress', style: { style: style }, min: '0', max: '100', value: '0' },
+	                    this.props.children
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Progress;
+	})(_react2['default'].Component);
+	
+	module.exports = exports['default'];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(158)))
+
+/***/ },
 /* 158 */,
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
@@ -20625,6 +20848,12 @@ webpackJsonp([1],[
 	exports.ImageCard = ImageCard;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(158)))
 
+/***/ },
+/* 160 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
 /***/ }
 ]);
-//# sourceMappingURL=success.js.map
+//# sourceMappingURL=index.js.map
