@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames'
 import {FileCard} from './card';
 
 export default class DragAndDrop extends React.Component {
@@ -6,7 +7,12 @@ export default class DragAndDrop extends React.Component {
         super(props);
         this.state = {
             notice: 'dragNotice',
-            process: 0, displayProcess: false,
+            process: 0, 
+            progressShow: false,
+            arrowHover: false,
+            arrowShow: true,
+            noticeShow: true,
+            holderShow: true,
             r: {
                 filename: '',
                 size: '',
@@ -19,13 +25,6 @@ export default class DragAndDrop extends React.Component {
                 quoteurl: ''
             }
         };
-        this.dragEnd = ::this.dragEnd;
-        this.dragOver = ::this.dragOver;
-        this.dragLeave = ::this.dragLeave;
-        this.onDrop = ::this.onDrop;
-        this.onChange = ::this.onChange;
-        this.handleProgress = ::this.handleProgress;
-
     }
 
     static defaultProps = {
@@ -48,35 +47,47 @@ export default class DragAndDrop extends React.Component {
     }
 
     dragEnd = (event) => {
-        $(React.findDOMNode(this.refs.arrow)).removeClass('hover');
-        this.setState({'notice': 'dragNotice'});
+        this.setState({
+            notice: 'dragNotice',
+            arrowHover: false,
+        });
     }
 
     dragOver = (event) => {
         event.preventDefault();
-        this.setState({'notice': 'dropNotice'});
-        $(React.findDOMNode(this.refs.arrow)).addClass('hover');
+        this.setState({
+            notice: 'dragNotice',
+            arrowHover: true,
+        });
     }
 
     dragLeave = (event) => {
-        $(React.findDOMNode(this.refs.arrow)).removeClass('hover');
+        this.setState({
+            arrowHover: false,
+        });
     }
 
     onDrop = (event) => {
-        $(React.findDOMNode(this.refs.holder)).removeClass();
+        console.log('onDrop')
         this.readfiles(event.nativeEvent.dataTransfer.files, event);
     }
 
     onChange = (event) => {
+        console.log('onChange')
         this.readfiles(event.target.files, event);
     }
 
     readfiles = (files, event) => {
+        this.setState({holderShow: false});
         if (files.length != 1) {
             event.preventDefault();
-            this.setState({'notice': 'multiNotice'});
+            this.setState({notice: 'multiNotice'});
             setTimeout(() => {
-                this.setState({'notice': 'dragNotice'});
+                this.setState({
+                    notice: 'dragNotice',
+                    arrowHover: false,
+                    holderShow: true,
+                });
             }.bind(this), 1000);
             return
         }
@@ -90,24 +101,30 @@ export default class DragAndDrop extends React.Component {
             xhr.onreadystatechange = function() {
                 if ( xhr.readyState == 4 ) {
                     if ( xhr.status == 200 ) {
-                        $(React.findDOMNode(this.refs.holder)).hide();
-                        $(React.findDOMNode(this.refs.arrow)).addClass('hide');
                         this.setState({
-                            'r': JSON.parse(xhr.responseText),
-                             'displayProcess': false
+                            r: JSON.parse(xhr.responseText),
+                            progressShow: false,
+                            showArrow: false,
                          });
-                    }
-                    else {
-                        this.setState({'process': 0});
+                    } else {
+                        this.setState({
+                            process: 0,
+                            arrowShow: true,
+                            arrowHover: false,
+                            noticeShow: true,
+                            progressShow: false,
+                            holderShow: true,
+                        });
                         alert('上传失败，请确认上传的文件类型合法');
                     }
                 }
             }.bind(this);
 
             if (this.props.tests.progress) {
-                let $arrow = $(React.findDOMNode(this.refs.arrow));
-                $arrow.addClass('hide');
-                $arrow.find('.notice').removeClass('show');
+                this.setState({
+                    arrowShow: false,
+                    noticeShow: false,
+                })
                 xhr.upload.addEventListener('progress', this.handleProgress);
             }
             xhr.send(formData);
@@ -119,23 +136,27 @@ export default class DragAndDrop extends React.Component {
             return;
         }
         var completed = (event.loaded / event.total * 100 | 0);
-        this.setState({'process': completed, 'displayProcess': true});
+        console.log('handle progress ' + completed);
+        this.setState({process: completed, progressShow: true});
     }
 
     render() {
         var noticeMsg = this.props.notices[this.state.notice];
-
         return (
             <div>
                 <input type='file' onDragEnd={this.dragEnd}
-                       onDragOver={this.dragOver} OnDragLeave={this.dragLeave}
-                       onDrop={this.onDrop} onChange={this.onChange} ref='holder' id="holder" />
-                <div className='arrow' ref='arrow'>
+                       onDragOver={this.dragOver} onDragLeave={this.dragLeave}
+                       onChange={this.onChange} id='holder'/>
+                <div className={classNames({
+                        'arrow': true,
+                        'hover': this.state.arrowHover,
+                        'hide': !this.state.arrowShow,
+                    })} ref='arrow'>
                     <div className="alpha-bg">
                         <span className="notice show">{noticeMsg}</span>
                     </div>
                 </div>
-                <Progress completed={this.state.process} show={this.state.displayProcess} />
+                { this.state.progressShow && <Progress completed={this.state.process}/> }
                 <FileCard filename={this.state.r.filename} size={this.state.r.size}
                           time={this.state.r.time} type={this.state.r.type}
                           url_d={this.state.r.url_d} url_p={this.state.r.url_p}
@@ -148,21 +169,14 @@ export default class DragAndDrop extends React.Component {
 
 class Progress extends React.Component {
     render() {
-        var cls;
-        if ( this.props.show ) {
-            cls = 'show'
-        } else {
-            cls = ''
-        }
         var style = {
             transition: 'width 20ms',
             WebkitTransition: 'width 2ms',
-            width: this.props.completed + '%',
-            eight: this.props.height || 10
+            height: this.props.height || 10
         }
         return (
-            <div id="progress" className={cls}>
-                <progress id="uploadprogress" style={{style}} min="0" max="100" value="0">{this.props.children}</progress>
+            <div id="progress" className="show">
+                <progress id="uploadprogress" style={style} min="0" max="100" value={this.props.completed}>{this.props.children}</progress>
             </div>
         )
     }

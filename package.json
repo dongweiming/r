@@ -27,6 +27,7 @@
     "webpack": "^1.11.0"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "jquery": "^2.1.4",
     "react": "^0.13.3"
   }
