@@ -22,9 +22,9 @@
     "css-loader": "^0.16.0",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.8.4",
-      "node-sass": "^3.2.0",
-      "sass-loader": "^2.0.1",
-      "webpack": "^1.11.0"
+    "node-sass": "^3.13.1",
+    "sass-loader": "^2.0.1",
+    "webpack": "^1.11.0"
   },
   "dependencies": {
     "jquery": "^2.1.4",

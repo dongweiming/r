@@ -102,7 +102,7 @@ export class ImageCard extends React.Component {
     }
 
     render() {
-        var qrURL = 'http://qr.dapps.douban.com/api/?text=$' + this.props.quoteurl;
+        var qrURL = 'http://qr.liantu.com/api.php?text=$' + this.props.quoteurl;
         return (
             <div>
                 <div id="image-card" className={this.props.show_image_card} ref="imageCard">
