@@ -7,6 +7,7 @@
     "build": "webpack --progress --colors",
     "watch": "webpack --watch --colors",
     "start": "webpack && python app.py",
+    "prod": "webpack --optimize-minimize --define process.env.NODE_ENV=\"'production'\"",
     "server": "python app.py"
   },
   "repository": {
@@ -28,7 +29,6 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "jquery": "^2.1.4",
     "react": "^0.13.3"
   }
 }

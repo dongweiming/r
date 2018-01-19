@@ -73,7 +73,6 @@ export class ImageCard extends React.Component {
         var $preview = $(React.findDOMNode(this.refs.preview));
         var $imageCard = $(React.findDOMNode(this.refs.imageCard));
         if ( !this.state.zoomed ) {
-            var height = $(window).height();
             $preview.addClass('zoomed');
             $imageCard.addClass('zoomed');
         } else {

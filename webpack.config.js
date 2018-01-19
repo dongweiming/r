@@ -11,7 +11,6 @@ module.exports = {
     entry: {
         index : path.join(jsPath, "main.jsx"),
         success : path.join(jsPath, "success.jsx"),
-        vendors : ['jquery']
     },
 
     output: {
@@ -56,13 +55,6 @@ module.exports = {
 
     plugins: [
         new ExtractTextPlugin("[name].css"),
-        new webpack.optimize.CommonsChunkPlugin("vendors", "vendors.js", Infinity),
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery",
-            "window.jQuery": "jquery",
-            "root.jQuery": "jquery"
-        })
     ],
 
     devtool: "source-map"
