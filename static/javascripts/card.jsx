@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export class FileCard extends React.Component {
     constructor(props) {
@@ -16,17 +17,17 @@ export class FileCard extends React.Component {
 
 
     componentDidUpdate() {
-        history.pushState("what", "p", this.props.url_p);
+        history.pushState("what", "p", this.props.url_s);
     }
 
     render() {
         var file_icon = 'file-icon';
         var show_card = '';
-        var show_image_card = '';
+        var show_image_card = false;
 
         if ( this.props.type === "image" ) {
             file_icon = 'file-icon invisible'
-            show_image_card = 'show-card'
+            show_image_card = true
         }
 
         if ( this.props.type && this.props.type !== "image" ) {
@@ -65,21 +66,10 @@ export class FileCard extends React.Component {
 export class ImageCard extends React.Component {
     constructor(props) {
         super(props);
-        this.onClick = ::this.onClick;
         this.state = {'zoomed': false}
     }
 
     onClick = (event) =>  {
-        var $preview = $(React.findDOMNode(this.refs.preview));
-        var $imageCard = $(React.findDOMNode(this.refs.imageCard));
-        if ( !this.state.zoomed ) {
-            $preview.addClass('zoomed');
-            $imageCard.addClass('zoomed');
-        } else {
-            $preview.removeClass('zoomed');
-            $imageCard.removeClass('zoomed');
-            $preview.css('max-height', '');
-        }
         this.setState({'zoomed': !this.state.zoomed});
     }
 
@@ -87,8 +77,12 @@ export class ImageCard extends React.Component {
         var qrURL = 'http://qr.liantu.com/api.php?el=m&text=' + this.props.image_link_input;
         return (
             <div>
-                <div id="image-card" className={this.props.show_image_card} ref="imageCard">
-                    <div id="image-preview" ref="preview">
+                <div id="image-card" className={classNames({
+                        'show-card': this.props.show_image_card,
+                        'zoomed': this.state.zoomed,
+                    })} ref="imageCard">
+                    <div id="image-preview" ref="preview" style={this.state.zoomed ? {maxHeight: ''} : null}
+                        className={classNames({'zoomed': this.state.zoomed})}>
                         <img src={this.props.url_i} onClick={this.onClick} ref="zoom" />
                         <div id="image-link" ref="link">
                             <input readOnly="true" type="text" value={this.props.image_link_input} />

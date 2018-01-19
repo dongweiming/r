@@ -370,7 +370,18 @@ def s(symlink):
     if not pasteFile:
         return abort(404)
 
-    return redirect(pasteFile.url_p)
+    file_json = json.dumps({
+        "url_d": pasteFile.url_d,
+        "url_i": pasteFile.url_i,
+        "url_s": pasteFile.url_s,
+        "url_p": pasteFile.url_p,
+        "filename": pasteFile.filename,
+        "size": pasteFile.size_humanize,
+        "time": str(pasteFile.uploadTime),
+        "type": pasteFile.type,
+        "quoteurl": pasteFile.quoteurl
+    })
+    return render_template('success.html', title=pasteFile.filename, file_json=file_json)
 
 
 if __name__ == "__main__":
