@@ -56,7 +56,7 @@ export default class DragAndDrop extends React.Component {
     dragOver = (event) => {
         event.preventDefault();
         this.setState({
-            notice: 'dragNotice',
+            notice: 'dropNotice',
             arrowHover: true,
         });
     }
@@ -88,7 +88,7 @@ export default class DragAndDrop extends React.Component {
                     arrowHover: false,
                     holderShow: true,
                 });
-            }.bind(this), 1000);
+            }.bind(this), 2000);
             return
         }
         var formData = this.props.tests.formdata ? new FormData() : null;
@@ -104,7 +104,7 @@ export default class DragAndDrop extends React.Component {
                         this.setState({
                             r: JSON.parse(xhr.responseText),
                             progressShow: false,
-                            showArrow: false,
+                            arrowShow: false,
                          });
                     } else {
                         this.setState({
@@ -144,9 +144,9 @@ export default class DragAndDrop extends React.Component {
         var noticeMsg = this.props.notices[this.state.notice];
         return (
             <div>
-                <input type='file' onDragEnd={this.dragEnd}
+                { this.state.holderShow && <input type='file' onDragEnd={this.dragEnd}
                        onDragOver={this.dragOver} onDragLeave={this.dragLeave}
-                       onChange={this.onChange} id='holder'/>
+                       onDrop={this.onDrop} onChange={this.onChange} id='holder'/> }
                 <div className={classNames({
                         'arrow': true,
                         'hover': this.state.arrowHover,
