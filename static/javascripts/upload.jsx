@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames'
-import {FileCard} from './card';
 
 export default class DragAndDrop extends React.Component {
     constructor(props) {
@@ -10,20 +9,8 @@ export default class DragAndDrop extends React.Component {
             process: 0, 
             progressShow: false,
             arrowHover: false,
-            arrowShow: true,
             noticeShow: true,
             holderShow: true,
-            r: {
-                filename: '',
-                size: '',
-                type: '',
-                time: '',
-                url_d: '',
-                url_s: '',
-                url_i: '',
-                url_p: '',
-                quoteurl: ''
-            }
         };
     }
 
@@ -47,7 +34,6 @@ export default class DragAndDrop extends React.Component {
     }
 
     dragEnd = (event) => {
-        console.log('dragend');
         event.preventDefault();
         this.setState({
             notice: 'dragNotice',
@@ -56,7 +42,6 @@ export default class DragAndDrop extends React.Component {
     }
 
     dragOver = (event) => {
-        console.log('dragover');
         event.preventDefault();
         // prevent too many ops
         if (!this.state.arrowHover) {
@@ -68,7 +53,6 @@ export default class DragAndDrop extends React.Component {
     }
 
     dragLeave = (event) => {
-        console.log('dragleave');
         event.preventDefault();
         this.setState({
             notice: 'dragNotice',
@@ -77,12 +61,10 @@ export default class DragAndDrop extends React.Component {
     }
 
     onDrop = (event) => {
-        console.log('onDrop')
         this.readfiles(event.nativeEvent.dataTransfer.files, event);
     }
 
     onChange = (event) => {
-        console.log('onChange')
         this.readfiles(event.target.files, event);
     }
 
@@ -110,15 +92,11 @@ export default class DragAndDrop extends React.Component {
             xhr.onreadystatechange = function() {
                 if ( xhr.readyState == 4 ) {
                     if ( xhr.status == 200 ) {
-                        this.setState({
-                            r: JSON.parse(xhr.responseText),
-                            progressShow: false,
-                            arrowShow: false,
-                         });
+                        var r = JSON.parse(xhr.responseText);
+                        window.location.href = r.url_s;
                     } else {
                         this.setState({
                             process: 0,
-                            arrowShow: true,
                             arrowHover: false,
                             noticeShow: true,
                             progressShow: false,
@@ -131,7 +109,6 @@ export default class DragAndDrop extends React.Component {
 
             if (this.props.tests.progress) {
                 this.setState({
-                    arrowShow: false,
                     noticeShow: false,
                 })
                 xhr.upload.addEventListener('progress', this.handleProgress);
@@ -170,24 +147,23 @@ export default class DragAndDrop extends React.Component {
         document.onpaste = this.handlePaste;
         return (
             <div>
-                { this.state.holderShow && <input type='file' onDragEnd={this.dragEnd}
-                       onDragOver={this.dragOver} onDragLeave={this.dragLeave}
-                       onDrop={this.onDrop} onChange={this.onChange} id='holder'/> }
-                <div className={classNames({
+                { this.state.holderShow && 
+                    <input type='file' id='holder'
+                           onDragEnd={this.dragEnd}
+                           onDragOver={this.dragOver} 
+                           onDragLeave={this.dragLeave} 
+                           onDrop={this.onDrop} 
+                           onChange={this.onChange}/> }
+                <div ref='arrow' 
+                     className={classNames({
                         'arrow': true,
                         'hover': this.state.arrowHover,
-                        'hide': !this.state.arrowShow,
-                    })} ref='arrow'>
+                     })}>
                     <div className="alpha-bg">
-                        <span className="notice show">{noticeMsg}</span>
+                        { this.state.noticeShow && <span className="notice show">{noticeMsg}</span> }
                     </div>
                 </div>
                 { this.state.progressShow && <Progress completed={this.state.process}/> }
-                <FileCard filename={this.state.r.filename} size={this.state.r.size}
-                          time={this.state.r.time} type={this.state.r.type}
-                          url_d={this.state.r.url_d} url_p={this.state.r.url_p}
-                          url_i={this.state.r.url_i} url_s={this.state.r.url_s}
-                          quoteurl={this.state.r.quoteurl} />
             </div>
         )
     }
