@@ -140,8 +140,25 @@ export default class DragAndDrop extends React.Component {
         this.setState({process: completed, progressShow: true});
     }
 
+    handlePaste = (event) => {
+        if (!this.state.holderShow) {
+            return;
+        }
+        console.log('onPaste');
+        var items = event.clipboardData.items;
+        var files = [];
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if (this.props.acceptedTypes[item.type]) {
+                files.push(item.getAsFile());
+            }
+        }
+        this.readfiles(files, event);
+    }
+
     render() {
         var noticeMsg = this.props.notices[this.state.notice];
+        document.onpaste = this.handlePaste;
         return (
             <div>
                 { this.state.holderShow && <input type='file' onDragEnd={this.dragEnd}
