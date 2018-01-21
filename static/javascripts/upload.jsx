@@ -47,6 +47,8 @@ export default class DragAndDrop extends React.Component {
     }
 
     dragEnd = (event) => {
+        console.log('dragend');
+        event.preventDefault();
         this.setState({
             notice: 'dragNotice',
             arrowHover: false,
@@ -54,15 +56,22 @@ export default class DragAndDrop extends React.Component {
     }
 
     dragOver = (event) => {
+        console.log('dragover');
         event.preventDefault();
-        this.setState({
-            notice: 'dropNotice',
-            arrowHover: true,
-        });
+        // prevent too many ops
+        if (!this.state.arrowHover) {
+            this.setState({
+                notice: 'dropNotice',
+                arrowHover: true,
+            });
+        }
     }
 
     dragLeave = (event) => {
+        console.log('dragleave');
+        event.preventDefault();
         this.setState({
+            notice: 'dragNotice',
             arrowHover: false,
         });
     }
