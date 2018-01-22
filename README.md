@@ -10,7 +10,7 @@ The [R Demo](https://vast-brushlands-4477.herokuapp.com) showcases `r`.
 
 # Get Started
 
-```python
+```shell
 git clone https://github.com/dongweiming/r
 cd r
 virtualenv venv
@@ -18,7 +18,8 @@ source venv/bin/activate
 pip install -r requirements.txt
 mkdir permdir
 ./setup_databases.sh
-python app.py
+npm install
+npm run start
 open http://localhost:5000
 ```
 
