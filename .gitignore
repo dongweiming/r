@@ -54,3 +54,8 @@ docs/_build/
 
 # PyBuilder
 target/
+
+venv/
+permdir/
+node_modules/
+package-lock.json

@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export class FileCard extends React.Component {
     constructor(props) {
@@ -16,35 +17,21 @@ export class FileCard extends React.Component {
 
 
     componentDidUpdate() {
-        history.pushState("what", "p", this.props.url_p);
-        if ( this.props.type === "binary" ) {
-            $(React.findDOMNode(this.refs.play)).hide();
-        }
+        history.pushState("what", "p", this.props.url_s);
     }
 
     render() {
         var file_icon = 'file-icon';
-        var image_link_input = '';
         var show_card = '';
-        var show_image_card = '';
+        var show_image_card = false;
 
         if ( this.props.type === "image" ) {
-            image_link_input = this.props.url_s;
             file_icon = 'file-icon invisible'
-            show_image_card = 'show-card'
+            show_image_card = true
         }
 
         if ( this.props.type && this.props.type !== "image" ) {
             show_card = 'show-card';
-        }
-
-        var playButtonText = '';
-        var playButtonHref = '';
-        if ( this.props.type == "pdf" ) {
-            playButtonText = 'preview';
-            playButtonHref = this.props.url_i;
-        } else if ( this.props.type !== "binary" ) {
-            playButtonHref = this.props.url_i;
         }
 
         return (
@@ -64,13 +51,13 @@ export class FileCard extends React.Component {
                             <input type="text" readOnly="true" value={this.props.url_s} id="link_s" />
                         </div>
                         <div id="action-area">
-                            <a href={this.props.url_d} id="download-link">download</a>
-                            <a ref="play" href={playButtonHref} id="play-link">{playButtonText}</a>
+                            <a href={this.props.url_d} id="download-link">Download</a>
+                            {this.props.type !== "binary" && <a href={this.props.url_i} id="play-link">Preview</a>}
                         </div>
                     </div>
                 </div>
                 <ImageCard show_image_card={show_image_card} url_i={this.props.url_i}
-                           image_link_input={image_link_input} quoteurl={this.props.quoteurl}/>
+                           image_link_input={this.props.url_s} quoteurl={this.props.quoteurl}/>
             </div>
         )
     }
@@ -79,41 +66,33 @@ export class FileCard extends React.Component {
 export class ImageCard extends React.Component {
     constructor(props) {
         super(props);
-        this.onClick = ::this.onClick;
         this.state = {'zoomed': false}
     }
 
     onClick = (event) =>  {
-        var $preview = $(React.findDOMNode(this.refs.preview));
-        var $imageCard = $(React.findDOMNode(this.refs.imageCard));
-        var $qr_code = $(React.findDOMNode(this.refs.qrcode));
-        if ( !this.state.zoomed ) {
-            var height = $(window).height();
-            $preview.addClass('zoomed');
-            $imageCard.addClass('zoomed');
-            $qr_code.css('display', 'none');
-        } else {
-            $preview.removeClass('zoomed');
-            $imageCard.removeClass('zoomed');
-            $preview.css('max-height', '');
-            $qr_code.css('display', '');
-        }
         this.setState({'zoomed': !this.state.zoomed});
     }
 
     render() {
-        var qrURL = 'http://qr.dapps.douban.com/api/?text=$' + this.props.quoteurl;
+        var qrURL = 'http://qr.liantu.com/api.php?el=m&w=200&m=10&text=' + this.props.image_link_input;
         return (
             <div>
-                <div id="image-card" className={this.props.show_image_card} ref="imageCard">
-                    <div id="image-preview" ref="preview">
-                        <img src={this.props.url_i} onClick={this.onClick} ref="zoom" />
-                        <div id="image-link" ref="link">
-                            <input readOnly="true" type="text" value={this.props.image_link_input} />
+                { this.props.show_image_card &&
+                    <div id="image-card"
+                         className={classNames({
+                            'show-card': true,
+                            'zoomed': this.state.zoomed,
+                         })}>
+                        <div id="image-preview" style={this.state.zoomed ? {maxHeight: ''} : null}
+                            className={classNames({'zoomed': this.state.zoomed})}>
+                            <img src={this.props.url_i} onClick={this.onClick}/>
+                            <div id="image-link">
+                                <input readOnly="true" type="text" value={this.props.image_link_input} />
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <img ref="qrcode" className="qrcode" src={qrURL} width="150" height="150" />
+                    </div> }
+                { !this.state.zoomed && this.props.image_link_input !== '' ?
+                    <img className="qrcode" src={qrURL} width="150" height="150" /> : null }
             </div>
         )
     }

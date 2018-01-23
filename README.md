@@ -10,7 +10,7 @@ The [R Demo](https://vast-brushlands-4477.herokuapp.com) showcases `r`.
 
 # Get Started
 
-```python
+```shell
 git clone https://github.com/dongweiming/r
 cd r
 virtualenv venv

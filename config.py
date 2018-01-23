@@ -16,7 +16,7 @@ except ImportError:
     UPLOAD_FOLDER = 'permdir'
 
 DEBUG = True
-MAX_CONTENT_LENGTH = 32 * 1024 * 1024
+MAX_CONTENT_LENGTH = 100 * 1024 * 1024
 SQLALCHEMY_DATABASE_URI = "mysql://%s:%s@%s:%s/%s" % (
     _SQL_PARAMS['user'], _SQL_PARAMS['passwd'], _SQL_PARAMS['host'],
     _SQL_PARAMS['port'], _SQL_PARAMS['db'])

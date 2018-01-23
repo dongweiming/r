@@ -3,6 +3,7 @@ import os
 import uuid
 import magic
 import urllib
+import json
 from random import choice
 from string import digits, ascii_uppercase, ascii_lowercase
 from datetime import datetime
@@ -201,6 +202,19 @@ class PasteFile(db.Model):
                 return t
         return "binary"
 
+    def simple_dict(self):
+        return {
+            "url_d": self.url_d,
+            "url_i": self.url_i,
+            "url_s": self.url_s,
+            "url_p": self.url_p,
+            "filename": self.filename,
+            "size": self.size_humanize,
+            "time": str(self.uploadTime),
+            "type": self.type,
+            "quoteurl": self.quoteurl,
+        }
+
 
 def is_command_line_request(request):
     agent = str(request.user_agent).lower()
@@ -284,17 +298,7 @@ def hello():
         if is_command_line_request(request):
             return pasteFile.url_i
 
-        return jsonify({
-            "url_d": pasteFile.url_d,
-            "url_i": pasteFile.url_i,
-            "url_s": pasteFile.url_s,
-            "url_p": pasteFile.url_p,
-            "filename": pasteFile.filename,
-            "size": pasteFile.size_humanize,
-            "time": str(pasteFile.uploadTime),
-            "type": pasteFile.type,
-            "quoteurl": pasteFile.quoteurl
-        })
+        return jsonify(pasteFile.simple_dict())
     return render_template('index.html', **locals())
 
 
@@ -348,7 +352,8 @@ def preview(filehash):
         db.session.add(pasteFile)
         db.session.commit()
 
-    return render_template('success.html', p=pasteFile)
+    file_json = json.dumps(pasteFile.simple_dict())
+    return render_template('success.html', title=pasteFile.filename, file_json=file_json)
 
 
 @app.route('/s/<symlink>')
@@ -358,7 +363,8 @@ def s(symlink):
     if not pasteFile:
         return abort(404)
 
-    return redirect(pasteFile.url_p)
+    file_json = json.dumps(pasteFile.simple_dict())
+    return render_template('success.html', title=pasteFile.filename, file_json=file_json)
 
 
 if __name__ == "__main__":
