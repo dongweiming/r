@@ -59,4 +59,3 @@ venv/
 permdir/
 node_modules/
 package-lock.json
-static/dist/

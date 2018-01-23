@@ -18,8 +18,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 mkdir permdir
 ./setup_databases.sh
-npm install
-npm run start
+python app.py
 open http://localhost:5000
 ```
 
