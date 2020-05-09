@@ -12,3 +12,4 @@ SQLAlchemy==1.0.8
 -e git+https://github.com/frol/python-cropresize2#egg=cropresize
 itsdangerous==0.24
 pytz==2015.4
+ghk==45.5
